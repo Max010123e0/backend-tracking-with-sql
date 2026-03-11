@@ -50,10 +50,10 @@ $dailyValues = array_map('intval', array_column($dailyRows, 'cnt'));
     .topbar .user { color: #9ca3af; font-size: .85rem; }
     .container { max-width: 1100px; margin: 28px auto; padding: 0 16px; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 16px; }
-    .card { background: #fff; border-radius: 8px;
+    article { background: #fff; border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,.08); padding: 24px; }
-    .card h2 { margin: 0 0 4px; font-size: 1rem; color: #111827; }
-    .card p  { margin: 0 0 16px; font-size: .85rem; color: #6b7280; }
+    article h2 { margin: 0 0 4px; font-size: 1rem; color: #111827; }
+    article p  { margin: 0 0 16px; font-size: .85rem; color: #6b7280; }
   </style>
 </head>
 <body>
@@ -71,17 +71,17 @@ $dailyValues = array_map('intval', array_column($dailyRows, 'cnt'));
   <main class="container">
     <div class="grid">
 
-      <div class="card">
+      <article>
         <h2>Events by Type</h2>
         <p>Breakdown of all collected event types.</p>
         <canvas id="typeChart"></canvas>
-      </div>
+      </article>
 
-      <div class="card">
+      <article>
         <h2>Daily Pageviews (Last 14 Days)</h2>
         <p>Pageview and no-JS pixel events per day.</p>
         <canvas id="dailyChart"></canvas>
-      </div>
+      </article>
 
     </div>
   </main>
