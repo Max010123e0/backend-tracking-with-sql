@@ -63,7 +63,9 @@ $_home = match(currentRole()) {
     <?php endif; ?>
     <?php if ($_home): ?>
       <a href="<?= htmlspecialchars($_home, ENT_QUOTES, 'UTF-8') ?>" class="btn">Go to Home</a>
-      <a href="/logout.php" class="btn btn-ghost">Sign Out</a>
+      <form method="post" action="/logout.php" style="display:inline">
+        <button type="submit" class="btn btn-ghost">Sign Out</button>
+      </form>
     <?php else: ?>
       <a href="/login.php" class="btn">Sign In</a>
     <?php endif; ?>

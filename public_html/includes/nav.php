@@ -35,6 +35,8 @@ $_navLinks = [
     <span class="user"><?= htmlspecialchars($_user, ENT_QUOTES, 'UTF-8') ?>
       <span class="role-badge role-<?= htmlspecialchars($_role, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($_role, ENT_QUOTES, 'UTF-8') ?></span>
     </span>
-    <a href="/logout.php">Logout</a>
+    <form method="post" action="/logout.php" style="display:inline">
+      <button type="submit" style="background:none;border:none;color:#f87171;cursor:pointer;font-size:.875rem;padding:6px 10px;border-radius:4px;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='none'">Logout</button>
+    </form>
   </nav>
 </header>

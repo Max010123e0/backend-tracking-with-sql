@@ -1,6 +1,12 @@
 <?php
 require_once __DIR__ . '/auth.php';
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    // GET requests are silently redirected — not logged out
+    header('Location: ' . (isLoggedIn() ? '/dashboard.php' : '/login.php'));
+    exit;
+}
+
 $_SESSION = [];
 
 if (ini_get('session.use_cookies')) {

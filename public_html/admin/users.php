@@ -193,7 +193,7 @@ $e = fn($s) => htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
     <a href="/saved-reports.php">Saved Reports</a>
     <a href="/admin/users.php" style="color:#fff">Users</a>
     <span class="user">Signed in as <?= $e(currentUser()) ?> (superadmin)</span>
-    <a href="/logout.php">Logout</a>
+    <form method="post" action="/logout.php" style="display:inline"><button type="submit" style="background:none;border:none;color:#f87171;cursor:pointer;font-size:.875rem">Logout</button></form>
   </nav>
 </header>
 
