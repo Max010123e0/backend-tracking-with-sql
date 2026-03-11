@@ -1,8 +1,5 @@
 <?php
 /**
- * Session auth guard — DB-backed, role-aware.
- * Include this at the top of every protected page.
- *
  * Roles:  superadmin  – full access including user management
  *         analyst     – access to sections listed in user_sections
  *         viewer      – saved reports only
@@ -14,7 +11,6 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once '/var/www/collector.maxk.site/db_config.php';
 
-// ── Core guards ──────────────────────────────────────────────────────────────
 
 /** Redirect to login if not authenticated. */
 function requireLogin(): void
@@ -54,7 +50,6 @@ function requireSection(string $section): void
     }
 }
 
-// ── Query helpers ─────────────────────────────────────────────────────────────
 
 function isLoggedIn(): bool
 {
@@ -94,7 +89,6 @@ function canAccessSection(string $section): bool
     return false; // viewers never access live sections
 }
 
-// ── Login / logout ────────────────────────────────────────────────────────────
 
 /**
  * Attempt DB login. Returns true and populates session on success.
