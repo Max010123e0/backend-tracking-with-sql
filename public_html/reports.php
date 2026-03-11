@@ -59,9 +59,9 @@ $total = (int) $cnt->fetch()['c'];
     .topbar a:hover { text-decoration: underline; }
     .topbar .user { color: #9ca3af; font-size: .85rem; }
     .container { max-width: 1200px; margin: 28px auto; padding: 0 16px; }
-    .card { background: #fff; border-radius: 8px;
+    section.card { background: #fff; border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,.08); padding: 20px; margin-bottom: 16px; }
-    .card h2 { margin: 0 0 4px; font-size: 1.1rem; color: #111827; }
+    section.card h2 { margin: 0 0 4px; font-size: 1.1rem; color: #111827; }
     .meta { color: #6b7280; font-size: .88rem; margin: 0 0 16px; }
     .filters { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
     .filters label { font-size: .85rem; font-weight: 600; }
@@ -94,13 +94,13 @@ $total = (int) $cnt->fetch()['c'];
     .badge-other       { background: #f3f4f6; color: #374151; }
     .url-cell { max-width: 360px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .sid-cell { font-family: monospace; font-size: .8rem; color: #6b7280; }
-    .pagination { display: flex; gap: 10px; align-items: center; margin-top: 16px; font-size: .9rem; }
-    .pagination a {
+    nav.pagination { display: flex; gap: 10px; align-items: center; margin-top: 16px; font-size: .9rem; }
+    nav.pagination a {
       padding: 6px 14px; border-radius: 6px; background: #e5e7eb;
       color: #374151; text-decoration: none; font-weight: 600;
     }
-    .pagination a:hover { background: #d1d5db; }
-    .pagination .info { color: #6b7280; }
+    nav.pagination a:hover { background: #d1d5db; }
+    nav.pagination .info { color: #6b7280; }
   </style>
 </head>
 <body>
@@ -116,7 +116,7 @@ $total = (int) $cnt->fetch()['c'];
   </header>
 
   <main class="container">
-    <div class="card">
+    <section class="card">
       <h2>Events Data Table</h2>
       <p class="meta">
         Raw events collected from <strong>test.maxk.site</strong> via collector.js and noscript pixel.
@@ -178,7 +178,7 @@ $total = (int) $cnt->fetch()['c'];
         </tbody>
       </table>
 
-      <div class="pagination">
+      <nav class="pagination" aria-label="Event table pagination">
         <?php if ($offset > 0): ?>
           <a href="?event_type=<?= urlencode($event_type) ?>&offset=<?= max(0, $offset - $limit) ?>">← Previous</a>
         <?php endif; ?>
@@ -186,8 +186,8 @@ $total = (int) $cnt->fetch()['c'];
         <?php if ($offset + $limit < $total): ?>
           <a href="?event_type=<?= urlencode($event_type) ?>&offset=<?= $offset + $limit ?>">Next →</a>
         <?php endif; ?>
-      </div>
-    </div>
+      </nav>
+    </section>
   </main>
 </body>
 </html>

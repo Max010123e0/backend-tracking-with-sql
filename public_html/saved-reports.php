@@ -80,7 +80,7 @@ if ($slug !== '') {
     .role-analyst    { background:#0284c7; color:#fff; }
     .role-viewer     { background:#6b7280; color:#fff; }
     .container { max-width: 860px; margin: 28px auto; padding: 0 16px; }
-    .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.08); padding: 28px; margin-bottom: 16px; }
+    article.card, aside.card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.08); padding: 28px; margin-bottom: 16px; }
     .report-header { border-left: 5px solid <?= $e($catColor) ?>; padding-left: 16px; margin-bottom: 20px; }
     .report-header h2 { margin: 0 0 4px; font-size: 1.4rem; }
     .meta { font-size: .85rem; color: #6b7280; margin-bottom: 12px; }
@@ -109,7 +109,7 @@ if ($slug !== '') {
 <main class="container">
   <?php if ($editMsg): ?><div class="msg" style="margin-bottom:12px"><?= $e($editMsg) ?></div><?php endif; ?>
 
-  <div class="card">
+  <article class="card">
     <div class="report-header">
       <h2><?= $e($report['title']) ?></h2>
       <div class="meta">
@@ -152,10 +152,10 @@ if ($slug !== '') {
         </form>
       <?php endif; ?>
     </div>
-  </div>
+  </article>
 
   <?php if ($canEdit): ?>
-  <div id="edit-form" class="card" hidden>
+  <aside id="edit-form" class="card" hidden>
     <h3 style="margin:0 0 12px;font-size:1rem">Edit Analyst Comment</h3>
     <form method="post" class="edit-form">
       <input type="hidden" name="report_id" value="<?= (int)$report['id'] ?>">
@@ -164,7 +164,7 @@ if ($slug !== '') {
         <button name="edit_comment" class="btn btn-primary">Save Comment</button>
       </div>
     </form>
-  </div>
+  </aside>
   <?php endif; ?>
 </main>
 </body>
@@ -246,7 +246,7 @@ $catColors = ['traffic'=>'#2563eb','performance'=>'#059669','errors'=>'#dc2626']
     .btn-secondary:hover { background: #e5e7eb; }
     .empty { text-align: center; padding: 60px 0; color: #9ca3af; }
     .empty strong { display: block; font-size: 1.1rem; margin-bottom: 8px; color: #6b7280; }
-    .card { background:#fff; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.08); padding:28px; }
+    section.card { background:#fff; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.08); padding:28px; }
   </style>
 </head>
 <body>
@@ -267,7 +267,7 @@ $catColors = ['traffic'=>'#2563eb','performance'=>'#059669','errors'=>'#dc2626']
   </div>
 
   <?php if (empty($rows)): ?>
-  <div class="card">
+  <section class="card">
     <div class="empty">
       <strong>No saved reports yet.</strong>
       <?php if ($role !== 'viewer'): ?>
@@ -279,7 +279,7 @@ $catColors = ['traffic'=>'#2563eb','performance'=>'#059669','errors'=>'#dc2626']
         When analysts publish a report snapshot, it will appear here.
       <?php endif; ?>
     </div>
-  </div>
+  </section>
   <?php else: ?>
     <?php foreach ($rows as $r):
       $color   = $catColors[$r['category']] ?? '#6b7280';
@@ -287,7 +287,7 @@ $catColors = ['traffic'=>'#2563eb','performance'=>'#059669','errors'=>'#dc2626']
       $c = $r['analyst_comment'] ?? '';
       $preview = $c !== '' ? (strlen($c) > 160 ? substr($c, 0, 159) . '…' : $c) : '';
     ?>
-    <div class="report-card">
+    <article class="report-card">
       <div class="stripe" style="background:<?= $e($color) ?>"></div>
       <div class="body">
         <h3><a href="/saved-reports.php?slug=<?= $e($r['slug']) ?>"><?= $e($r['title']) ?></a></h3>
@@ -309,7 +309,7 @@ $catColors = ['traffic'=>'#2563eb','performance'=>'#059669','errors'=>'#dc2626']
           <?php endif; ?>
         </div>
       </div>
-    </div>
+    </article>
     <?php endforeach; ?>
   <?php endif; ?>
 </main>
