@@ -1,0 +1,35 @@
+# REST API Routing for reporting.maxk.site
+# Enables clean URLs for API endpoints
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /api/
+    
+    # Route /api/events to events.php
+    RewriteRule ^events/?$ events.php [L,QSA]
+    RewriteRule ^events/(.+)$ events.php/$1 [L,QSA]
+    
+    # Route /api/sessions to sessions.php
+    RewriteRule ^sessions/?$ sessions.php [L,QSA]
+    RewriteRule ^sessions/(.+)$ sessions.php/$1 [L,QSA]
+    
+    # Route /api/pageviews to pageviews.php
+    RewriteRule ^pageviews/?$ pageviews.php [L,QSA]
+    RewriteRule ^pageviews/(.+)$ pageviews.php/$1 [L,QSA]
+    
+    # Route /api/errors to errors.php
+    RewriteRule ^errors/?$ errors.php [L,QSA]
+    RewriteRule ^errors/(.+)$ errors.php/$1 [L,QSA]
+</IfModule>
+
+# CORS headers
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
+
+# Security
+<FilesMatch "\.(php)$">
+    # Enable PHP execution
+</FilesMatch>

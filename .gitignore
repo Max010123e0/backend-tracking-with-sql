@@ -1,0 +1,13 @@
+# Dependencies (regenerate with: composer install)
+vendor/
+
+# Generated PDF files
+pdf_storage/
+
+# DB credentials - never commit
+db_config.php
+
+# OS / editor noise
+.DS_Store
+*.swp
+*.swo

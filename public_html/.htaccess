@@ -1,0 +1,11 @@
+# Analytics Reporting – root .htaccess
+
+Options -Indexes
+
+# Custom error pages
+ErrorDocument 403 /403.php
+ErrorDocument 404 /404.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+</IfModule>
