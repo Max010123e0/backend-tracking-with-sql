@@ -1,7 +1,6 @@
 <?php
 http_response_code(403);
 if (session_status() === PHP_SESSION_NONE) session_start();
-// auth.php may already be loaded; only include if helpers aren't defined
 if (!function_exists('isLoggedIn')) {
     require_once __DIR__ . '/auth.php';
 }
@@ -25,7 +24,7 @@ $_home = match(currentRole()) {
       display: flex; align-items: center; justify-content: center;
       min-height: 100vh;
     }
-    .card {
+    main {
       background: #fff; border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,.08);
       padding: 40px 36px; max-width: 480px; width: 100%; text-align: center;
@@ -50,8 +49,8 @@ $_home = match(currentRole()) {
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="code">403</div>
+  <main>
+    <p class="code">403</p>
     <h1>Access Denied</h1>
     <p>You don't have permission to view this page.<br>
        If you believe this is a mistake, contact your administrator.</p>
@@ -61,6 +60,6 @@ $_home = match(currentRole()) {
     <?php else: ?>
       <a href="/login.php" class="btn">Sign In</a>
     <?php endif; ?>
-  </div>
+  </main>
 </body>
 </html>

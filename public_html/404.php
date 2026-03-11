@@ -24,7 +24,7 @@ $_home = match(currentRole()) {
       display: flex; align-items: center; justify-content: center;
       min-height: 100vh;
     }
-    .card {
+    main {
       background: #fff; border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,.08);
       padding: 40px 36px; max-width: 480px; width: 100%; text-align: center;
@@ -54,8 +54,8 @@ $_home = match(currentRole()) {
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="code">404</div>
+  <main>
+    <p class="code">404</p>
     <h1>Page Not Found</h1>
     <p>The page you're looking for doesn't exist or has been moved.</p>
     <?php if (!empty($_SERVER['REQUEST_URI'])): ?>
@@ -67,6 +67,6 @@ $_home = match(currentRole()) {
     <?php else: ?>
       <a href="/login.php" class="btn">Sign In</a>
     <?php endif; ?>
-  </div>
+  </main>
 </body>
 </html>
