@@ -46,7 +46,7 @@ $_home = match(currentRole()) {
       background: #e5e7eb; color: #374151;
     }
     .btn-ghost:hover { background: #d1d5db; }
-    .url {
+    code.url {
       display: inline-block; background: #f3f4f6; border-radius: 4px;
       padding: 4px 10px; font-family: monospace; font-size: .85rem;
       color: #374151; margin-bottom: 20px; word-break: break-all;
@@ -59,7 +59,7 @@ $_home = match(currentRole()) {
     <h1>Page Not Found</h1>
     <p>The page you're looking for doesn't exist or has been moved.</p>
     <?php if (!empty($_SERVER['REQUEST_URI'])): ?>
-      <div class="url"><?= htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8') ?></div>
+      <code class="url"><?= htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8') ?></code>
     <?php endif; ?>
     <?php if ($_home): ?>
       <a href="<?= htmlspecialchars($_home, ENT_QUOTES, 'UTF-8') ?>" class="btn">Go to Home</a>
