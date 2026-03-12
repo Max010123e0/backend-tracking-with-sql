@@ -1,16 +1,4 @@
 <?php
-/**
- * Sessions API Endpoint
- * Handles CRUD operations for user sessions
- * 
- * Routes:
- * GET    /api/sessions         - Get all sessions
- * GET    /api/sessions/{id}    - Get specific session by ID
- * POST   /api/sessions         - Create new session
- * PUT    /api/sessions/{id}    - Update session by ID
- * DELETE /api/sessions/{id}    - Delete session by ID
- */
-
 require_once __DIR__ . '/../../db_config.php';
 
 // Set CORS headers

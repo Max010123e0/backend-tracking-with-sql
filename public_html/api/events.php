@@ -1,16 +1,4 @@
 <?php
-/**
- * Events API Endpoint
- * Handles CRUD operations for analytics events
- * 
- * Routes:
- * GET    /api/events         - Get all events (with optional filters)
- * GET    /api/events/{id}    - Get specific event by ID
- * POST   /api/events         - Create new event
- * PUT    /api/events/{id}    - Update event by ID
- * DELETE /api/events/{id}    - Delete event by ID
- */
-
 require_once __DIR__ . '/../../db_config.php';
 
 // Set CORS headers

@@ -1,8 +1,5 @@
 <?php
-/**
- * PDF Export  –  /export/pdf.php?report=traffic|performance|errors&days=30
- * Requires: analyst or superadmin + matching section access.
- */
+// PDF Export  –  /export/pdf.php?report=traffic|performance|errors&days=30
 require_once __DIR__ . '/../auth.php';
 requireRole('superadmin', 'analyst');
 

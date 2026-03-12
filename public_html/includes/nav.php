@@ -1,8 +1,4 @@
 <?php
-/**
- * Shared topbar + nav for all reporting pages.
- * Expects $currentSection (string) and auth.php already loaded.
- */
 $_role     = currentRole();
 $_user     = currentUser();
 $_sections = allowedSections();

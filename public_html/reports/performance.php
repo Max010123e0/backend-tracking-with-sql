@@ -8,12 +8,7 @@ $currentSection = 'performance';
 
 $days = max(7, min(90, (int)($_GET['days'] ?? 30)));
 
-// ── Web Vitals thresholds (Google Core Web Vitals) ─────────────────────────
-// LCP: good <2500ms, needs improvement <4000ms, poor ≥4000ms
-// CLS: good <0.1, needs improvement <0.25, poor ≥0.25
-// INP: good <200ms, needs improvement <500ms, poor ≥500ms
-
-// ── Vitals per page ────────────────────────────────────────────────────────
+// Vitals per page
 $vitalsRows = $pdo->prepare(
     "SELECT url, COUNT(*) AS samples,
             ROUND(AVG(CAST(JSON_UNQUOTE(lcp) AS DECIMAL(12,2))),0) AS avg_lcp,
@@ -44,7 +39,7 @@ $lcpValues   = array_map(fn($r) => (float)$r['avg_lcp'], $vc);
 $clsValues   = array_map(fn($r) => (float)$r['avg_cls'], $vc);
 $inpValues   = array_map(fn($r) => (float)$r['avg_inp'], $vc);
 
-// ── Daily vitals trend ────────────────────────────────────────────────────
+// Daily vitals trend
 $trendRows = $pdo->prepare(
     "SELECT DATE(timestamp) AS day,
             ROUND(AVG(CAST(JSON_UNQUOTE(lcp) AS DECIMAL(12,2))),0) AS avg_lcp
@@ -57,7 +52,7 @@ $trend = $trendRows->fetchAll();
 $trendLabels = array_column($trend, 'day');
 $trendValues = array_map(fn($r) => (float)$r['avg_lcp'], $trend);
 
-// ── Overall summary ────────────────────────────────────────────────────────
+// Overall summary
 $summary = $pdo->prepare(
     "SELECT COUNT(*) AS samples,
             ROUND(AVG(CAST(JSON_UNQUOTE(lcp) AS DECIMAL(12,2))),0) AS avg_lcp,
@@ -69,7 +64,7 @@ $summary = $pdo->prepare(
 $summary->execute([$days]);
 $sum = $summary->fetch();
 
-// ── Handle save ───────────────────────────────────────────────────────────
+// Handle save
 $saveMsg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_report'])) {
     requireRole('superadmin','analyst');
@@ -134,8 +129,8 @@ $inpClass = function($v) {
     .stat-card { background:#fff; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.08);
                  padding:18px 20px; text-align:center; }
     .stat-card .label { font-size:.78rem; color:#6b7280; text-transform:uppercase;
-                        letter-spacing:.04em; margin-bottom:6px; }
-    .stat-card .value { font-size:1.8rem; font-weight:800; }
+                        letter-spacing:.04em; margin:0 0 6px; }
+    .stat-card .value { display:block; font-size:1.8rem; font-weight:800; }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
     .filters { display:flex; gap:10px; align-items:center; margin-bottom:18px; }
     .filters label { font-size:.83rem; font-weight:600; }
@@ -149,8 +144,9 @@ $inpClass = function($v) {
     tbody td { padding:8px 12px; border-bottom:1px solid #f3f4f6; }
     tbody tr:hover { background:#f9fafb; }
     .url-cell { max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .threshold-key { display:flex; gap:16px; font-size:.78rem; margin-bottom:12px; }
-    .threshold-key span { display:flex; align-items:center; gap:4px; }
+    .threshold-key { display:flex; gap:16px; font-size:.78rem; margin-bottom:12px;
+                      list-style:none; padding:0; }
+    .threshold-key li { display:flex; align-items:center; gap:4px; }
     .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
     .save-section { border-top:1px solid #e5e7eb; margin-top:18px; padding-top:18px; }
     .save-section h3 { margin:0 0 12px; font-size:.95rem; color:#111827; }
@@ -172,11 +168,11 @@ $inpClass = function($v) {
 <main class="container">
 
   <noscript>
-    <div class="ns-warn">⚠ JavaScript is disabled. Charts are not displayed, but all data tables remain fully accessible below.</div>
+    <p class="ns-warn">⚠ JavaScript is disabled. Charts are not displayed, but all data tables remain fully accessible below.</p>
   </noscript>
 
   <?php if ($saveMsg): ?>
-    <div class="alert-success"><?= $e($saveMsg) ?></div>
+    <p class="alert-success" role="status"><?= $e($saveMsg) ?></p>
   <?php endif; ?>
 
   <form method="get" class="filters">
@@ -195,26 +191,26 @@ $inpClass = function($v) {
     [$clsL,$clsS] = $clsClass((float)$sum['avg_cls']);
     [$inpL,$inpS] = $inpClass((float)$sum['avg_inp']);
   ?>
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="label">Avg LCP</div>
-      <div class="value" style="<?= $lcpS ?>"><?= $sum['avg_lcp']>0 ? number_format((int)$sum['avg_lcp']).'ms' : '—' ?></div>
-      <div style="font-size:.78rem;color:#6b7280;margin-top:4px"><?= $lcpL ?> · target &lt;2500ms</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Avg CLS</div>
-      <div class="value" style="<?= $clsS ?>"><?= $sum['avg_cls']>0 ? number_format((float)$sum['avg_cls'],4) : '—' ?></div>
-      <div style="font-size:.78rem;color:#6b7280;margin-top:4px"><?= $clsL ?> · target &lt;0.1</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Avg INP</div>
-      <div class="value" style="<?= $inpS ?>"><?= $sum['avg_inp']>0 ? number_format((int)$sum['avg_inp']).'ms' : '—' ?></div>
-      <div style="font-size:.78rem;color:#6b7280;margin-top:4px"><?= $inpL ?> · target &lt;200ms</div>
-    </div>
-  </div>
+  <section class="stats-grid">
+    <article class="stat-card">
+      <p class="label">Avg LCP</p>
+      <output class="value" style="<?= $lcpS ?>"><?= $sum['avg_lcp']>0 ? number_format((int)$sum['avg_lcp']).'ms' : '—' ?></output>
+      <p style="font-size:.78rem;color:#6b7280;margin-top:4px"><?= $lcpL ?> · target &lt;2500ms</p>
+    </article>
+    <article class="stat-card">
+      <p class="label">Avg CLS</p>
+      <output class="value" style="<?= $clsS ?>"><?= $sum['avg_cls']>0 ? number_format((float)$sum['avg_cls'],4) : '—' ?></output>
+      <p style="font-size:.78rem;color:#6b7280;margin-top:4px"><?= $clsL ?> · target &lt;0.1</p>
+    </article>
+    <article class="stat-card">
+      <p class="label">Avg INP</p>
+      <output class="value" style="<?= $inpS ?>"><?= $sum['avg_inp']>0 ? number_format((int)$sum['avg_inp']).'ms' : '—' ?></output>
+      <p style="font-size:.78rem;color:#6b7280;margin-top:4px"><?= $inpL ?> · target &lt;200ms</p>
+    </article>
+  </section>
 
   <!-- LCP trend -->
-  <div class="card">
+  <section class="card">
     <h2>LCP Trend Over Time</h2>
     <p class="sub">Daily average Largest Contentful Paint. Good threshold: under 2500 ms.</p>
     <canvas id="trendChart" height="80"></canvas>
@@ -225,25 +221,25 @@ $inpClass = function($v) {
       <?php endforeach; ?>
       </tbody></table>
     </noscript>
-  </div>
+  </section>
 
-  <div class="grid2">
+  <section class="grid2">
     <!-- LCP per page bar chart -->
-    <div class="card">
+    <section class="card">
       <h2>Avg LCP per Page</h2>
       <p class="sub">Lower is better. Red line = 2500 ms "Good" threshold.</p>
       <canvas id="lcpChart" height="160"></canvas>
-    </div>
+    </section>
 
     <!-- Vitals table -->
-    <div class="card">
+    <section class="card">
       <h2>Core Web Vitals by Page</h2>
       <p class="sub">LCP, CLS, and INP averages with Google thresholds applied.</p>
-      <div class="threshold-key">
-        <span><span class="dot" style="background:#16a34a"></span>Good</span>
-        <span><span class="dot" style="background:#d97706"></span>Needs Work</span>
-        <span><span class="dot" style="background:#dc2626"></span>Poor</span>
-      </div>
+      <ul class="threshold-key">
+        <li><span class="dot" style="background:#16a34a"></span>Good</li>
+        <li><span class="dot" style="background:#d97706"></span>Needs Work</li>
+        <li><span class="dot" style="background:#dc2626"></span>Poor</li>
+      </ul>
       <table>
         <thead><tr><th>Page</th><th>Samples</th><th>LCP</th><th>CLS</th><th>INP</th></tr></thead>
         <tbody>
@@ -263,17 +259,17 @@ $inpClass = function($v) {
           <?php if (!$vitals): ?><tr><td colspan="5" style="color:#9ca3af;text-align:center">No vitals data</td></tr><?php endif; ?>
         </tbody>
       </table>
-    </div>
-  </div>
+    </section>
+  </section>
 
   <!-- Analyst comment + save -->
   <?php if (in_array(currentRole(), ['superadmin','analyst'])): ?>
-  <div class="card" style="margin-bottom:10px">
+  <section class="card" style="margin-bottom:10px">
     <a href="/export/pdf.php?report=performance&days=<?= $days ?>" class="btn btn-secondary" style="display:inline-flex;align-items:center;gap:6px">&#x2193; Export PDF</a>
     <span style="font-size:.8rem;color:#6b7280;margin-left:8px">Downloads a PDF snapshot of this report (last <?= $days ?> days)</span>
-  </div>
-  <div class="card">
-    <div class="save-section">
+  </section>
+  <section class="card">
+    <section class="save-section">
       <h3>Save This Report</h3>
       <form method="post">
         <input type="hidden" name="save_report" value="1">
@@ -284,8 +280,8 @@ $inpClass = function($v) {
           placeholder="Assess the Core Web Vitals: are LCP/CLS/INP within Google's thresholds? Note any pages that need optimization…"></textarea>
         <button type="submit" class="btn btn-primary">Save Report</button>
       </form>
-    </div>
-  </div>
+    </section>
+  </section>
   <?php endif; ?>
 
 </main>

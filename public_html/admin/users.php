@@ -10,11 +10,10 @@ $errors   = [];
 $success  = '';
 $editUser = null;
 
-// ── Handle POST actions ───────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
-    // ── Create user ──
+    // Create user
     if ($action === 'create') {
         $uname    = trim($_POST['username'] ?? '');
         $pass     = $_POST['password'] ?? '';
@@ -55,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // ── Update user ──
+    // Update user
     elseif ($action === 'update') {
         $uid      = (int) ($_POST['user_id'] ?? 0);
         $role     = $_POST['role'] ?? '';
@@ -90,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // ── Delete user ──
+    // Delete user
     elseif ($action === 'delete') {
         $uid = (int) ($_POST['user_id'] ?? 0);
         if ($uid === currentUserId()) {
@@ -200,14 +199,13 @@ $e = fn($s) => htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
 <main class="container">
 
   <?php if ($errors): ?>
-    <div class="alert alert-error"><?= implode('<br>', array_map($e, $errors)) ?></div>
+    <p class="alert alert-error" role="alert"><?= implode('<br>', array_map($e, $errors)) ?></p>
   <?php elseif ($success): ?>
-    <div class="alert alert-success"><?= $e($success) ?></div>
+    <p class="alert alert-success" role="status"><?= $e($success) ?></p>
   <?php endif; ?>
 
-  <!-- ── Edit form (shown when ?edit=id) ── -->
   <?php if ($editUser): ?>
-  <div class="card">
+  <section class="card">
     <h2>Edit User: <?= $e($editUser['username']) ?></h2>
     <form method="post" action="/admin/users.php">
       <input type="hidden" name="action"  value="update">
@@ -242,11 +240,11 @@ $e = fn($s) => htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
       <button type="submit" class="btn btn-primary">Save Changes</button>
       <a href="/admin/users.php" class="btn btn-ghost" style="margin-left:8px">Cancel</a>
     </form>
-  </div>
+  </section>
   <?php endif; ?>
 
-  <!-- ── Create user form ── -->
-  <div class="card">
+  <!-- Create User Form -->
+  <section class="card">
     <h2>Create New User</h2>
     <form method="post" action="/admin/users.php">
       <input type="hidden" name="action" value="create">
@@ -286,10 +284,10 @@ $e = fn($s) => htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
       </div>
       <button type="submit" class="btn btn-primary">Create User</button>
     </form>
-  </div>
+  </section>
 
-  <!-- ── Users table ── -->
-  <div class="card">
+  <!-- User Table -->
+  <section class="card">
     <h2>All Users</h2>
     <table>
       <thead>
@@ -309,7 +307,7 @@ $e = fn($s) => htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
           <td><?= $e($u['sections'] ?? '—') ?></td>
           <td><?= $e(substr($u['created_at'], 0, 10)) ?></td>
           <td>
-            <div class="actions">
+            <menu class="actions">
               <a href="/admin/users.php?edit=<?= (int)$u['id'] ?>" class="btn btn-warning" style="font-size:.8rem;padding:5px 12px">Edit</a>
               <?php if ($u['id'] !== currentUserId()): ?>
               <form method="post" action="/admin/users.php"
@@ -319,13 +317,13 @@ $e = fn($s) => htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
                 <button type="submit" class="btn btn-danger" style="font-size:.8rem;padding:5px 12px">Delete</button>
               </form>
               <?php endif; ?>
-            </div>
+            </menu>
           </td>
         </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
-  </div>
+  </section>
 
 </main>
 

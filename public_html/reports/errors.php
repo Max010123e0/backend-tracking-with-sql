@@ -10,7 +10,7 @@ $days = max(7, min(90, (int)($_GET['days'] ?? 30)));
 $limit  = 50;
 $offset = max(0, (int)($_GET['offset'] ?? 0));
 
-// ── Error type breakdown (for doughnut) ──────────────────────────────────
+// Error type breakdown (for doughnut)
 $typeRows = $pdo->prepare(
     "SELECT JSON_UNQUOTE(error_type) AS type, COUNT(*) AS cnt
      FROM errors
@@ -23,7 +23,7 @@ $typeData = $typeRows->fetchAll();
 $typeLabels = array_column($typeData, 'type');
 $typeValues = array_map('intval', array_column($typeData, 'cnt'));
 
-// ── Daily error trend ────────────────────────────────────────────────────
+// Daily error trend
 $trendRows = $pdo->prepare(
     "SELECT DATE(timestamp) AS day, COUNT(*) AS cnt
      FROM errors
@@ -35,7 +35,7 @@ $trend = $trendRows->fetchAll();
 $trendLabels = array_column($trend, 'day');
 $trendValues = array_map('intval', array_column($trend, 'cnt'));
 
-// ── Top error messages ────────────────────────────────────────────────────
+// Top error messages
 $topMsgs = $pdo->prepare(
     "SELECT JSON_UNQUOTE(error_type) AS type,
             JSON_UNQUOTE(error_message) AS message,
@@ -48,7 +48,7 @@ $topMsgs = $pdo->prepare(
 $topMsgs->execute([$days]);
 $topErrors = $topMsgs->fetchAll();
 
-// ── Paginated error log ───────────────────────────────────────────────────
+// Paginated error log 
 $logRows = $pdo->prepare(
     "SELECT e.id, e.session_id, e.url,
             JSON_UNQUOTE(e.error_type)    AS type,
@@ -70,7 +70,7 @@ $cntRow = $pdo->prepare(
 $cntRow->execute([$days]);
 $total = (int)$cntRow->fetch()['c'];
 
-// ── Summary ──────────────────────────────────────────────────────────────
+// Summary
 $sumRow = $pdo->prepare(
     "SELECT COUNT(*) AS total_errors,
             COUNT(DISTINCT session_id) AS affected_sessions,
@@ -80,7 +80,7 @@ $sumRow = $pdo->prepare(
 $sumRow->execute([$days]);
 $sum = $sumRow->fetch();
 
-// ── Handle save ───────────────────────────────────────────────────────────
+// Handle save
 $saveMsg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_report'])) {
     requireRole('superadmin','analyst');
@@ -128,7 +128,7 @@ $paginUrl = fn($o) => '?days='.$days.'&offset='.$o;
                  padding:18px 20px; text-align:center; }
     .stat-card .label { font-size:.78rem; color:#6b7280; text-transform:uppercase;
                         letter-spacing:.04em; margin-bottom:6px; }
-    .stat-card .value { font-size:2rem; font-weight:800; color:#ef4444; }
+    .stat-card .value { display:block; font-size:2rem; font-weight:800; color:#ef4444; }
     .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
     .filters { display:flex; gap:10px; align-items:center; margin-bottom:18px; }
     .filters label { font-size:.83rem; font-weight:600; }
@@ -171,11 +171,11 @@ $paginUrl = fn($o) => '?days='.$days.'&offset='.$o;
 <main class="container">
 
   <noscript>
-    <div class="ns-warn">⚠ JavaScript is disabled. Charts are not displayed, but all data tables remain fully accessible below.</div>
+    <p class="ns-warn">⚠ JavaScript is disabled. Charts are not displayed, but all data tables remain fully accessible below.</p>
   </noscript>
 
   <?php if ($saveMsg): ?>
-    <div class="alert-success"><?= $e($saveMsg) ?></div>
+    <p class="alert-success" role="status"><?= $e($saveMsg) ?></p>
   <?php endif; ?>
 
   <form method="get" class="filters">
@@ -189,24 +189,24 @@ $paginUrl = fn($o) => '?days='.$days.'&offset='.$o;
   </form>
 
   <!-- Summary -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="label">Total Errors</div>
-      <div class="value"><?= number_format((int)$sum['total_errors']) ?></div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Affected Sessions</div>
-      <div class="value"><?= number_format((int)$sum['affected_sessions']) ?></div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Distinct Error Types</div>
-      <div class="value" style="color:#f59e0b"><?= number_format((int)$sum['distinct_types']) ?></div>
-    </div>
-  </div>
+  <section class="stats-grid">
+    <article class="stat-card">
+      <p class="label">Total Errors</p>
+      <output class="value"><?= number_format((int)$sum['total_errors']) ?></output>
+    </article>
+    <article class="stat-card">
+      <p class="label">Affected Sessions</p>
+      <output class="value"><?= number_format((int)$sum['affected_sessions']) ?></output>
+    </article>
+    <article class="stat-card">
+      <p class="label">Distinct Error Types</p>
+      <output class="value" style="color:#f59e0b"><?= number_format((int)$sum['distinct_types']) ?></output>
+    </article>
+  </section>
 
-  <div class="grid2">
+  <section class="grid2">
     <!-- Error type doughnut -->
-    <div class="card">
+    <section class="card">
       <h2>Errors by Type</h2>
       <p class="sub">Distribution of collected error types in the selected period.</p>
       <canvas id="typeChart" style="max-height:240px"></canvas>
@@ -217,10 +217,10 @@ $paginUrl = fn($o) => '?days='.$days.'&offset='.$o;
         <?php endforeach; ?>
         </tbody></table>
       </noscript>
-    </div>
+    </section>
 
     <!-- Daily trend -->
-    <div class="card">
+    <section class="card">
       <h2>Daily Error Count</h2>
       <p class="sub">Total errors triggered per day. Spikes may indicate deployments or user-facing issues.</p>
       <canvas id="trendChart" style="max-height:240px"></canvas>
@@ -231,11 +231,11 @@ $paginUrl = fn($o) => '?days='.$days.'&offset='.$o;
         <?php endforeach; ?>
         </tbody></table>
       </noscript>
-    </div>
-  </div>
+    </section>
+  </section>
 
   <!-- Top error messages -->
-  <div class="card">
+  <section class="card">
     <h2>Top Error Messages</h2>
     <p class="sub">Most frequently occurring errors — these are the highest-priority items to fix.</p>
     <table>
@@ -252,10 +252,10 @@ $paginUrl = fn($o) => '?days='.$days.'&offset='.$o;
         <?php if (!$topErrors): ?><tr><td colspan="4" style="color:#9ca3af;text-align:center">No errors recorded</td></tr><?php endif; ?>
       </tbody>
     </table>
-  </div>
+  </section>
 
   <!-- Full error log -->
-  <div class="card">
+  <section class="card">
     <h2>Error Log</h2>
     <p class="sub">Full paginated log — <?= number_format($total) ?> total errors in the selected period.</p>
     <table>
@@ -279,7 +279,7 @@ $paginUrl = fn($o) => '?days='.$days.'&offset='.$o;
 
     <!-- Pagination -->
     <?php if ($total > $limit): ?>
-    <div class="pagination">
+    <nav class="pagination" aria-label="Error log pagination">
       <?php if ($offset > 0): ?>
         <a href="<?= $e($paginUrl(max(0, $offset-$limit))) ?>">← Prev</a>
       <?php endif; ?>
@@ -287,18 +287,18 @@ $paginUrl = fn($o) => '?days='.$days.'&offset='.$o;
       <?php if ($offset+$limit < $total): ?>
         <a href="<?= $e($paginUrl($offset+$limit)) ?>">Next →</a>
       <?php endif; ?>
-    </div>
+    </nav>
     <?php endif; ?>
-  </div>
+  </section>
 
   <!-- Analyst comment + save -->
   <?php if (in_array(currentRole(), ['superadmin','analyst'])): ?>
-  <div class="card" style="margin-bottom:10px">
+  <section class="card" style="margin-bottom:10px">
     <a href="/export/pdf.php?report=errors&days=<?= $days ?>" class="btn btn-secondary" style="display:inline-flex;align-items:center;gap:6px">&#x2193; Export PDF</a>
     <span style="font-size:.8rem;color:#6b7280;margin-left:8px">Downloads a PDF snapshot of this report (last <?= $days ?> days)</span>
-  </div>
-  <div class="card">
-    <div class="save-section">
+  </section>
+  <section class="card">
+    <section class="save-section">
       <h3>Save This Report</h3>
       <form method="post">
         <input type="hidden" name="save_report" value="1">
@@ -309,8 +309,8 @@ $paginUrl = fn($o) => '?days='.$days.'&offset='.$o;
           placeholder="Explain the errors: what caused them, their impact on users, and recommended fixes…"></textarea>
         <button type="submit" class="btn btn-primary">Save Report</button>
       </form>
-    </div>
-  </div>
+    </section>
+  </section>
   <?php endif; ?>
 
 </main>

@@ -1,8 +1,5 @@
 <?php
-/**
- * Delete a saved PDF export.
- * POST /export/delete.php  {token}
- */
+// Delete a saved PDF export.
 require_once __DIR__ . '/../auth.php';
 requireRole('superadmin', 'analyst');
 

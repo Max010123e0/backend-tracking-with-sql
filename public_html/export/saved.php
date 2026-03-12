@@ -1,9 +1,5 @@
 <?php
-/**
- * List of saved PDF exports.
- * /export/saved.php
- * Accessible to analysts and superadmins (not viewers).
- */
+//List of saved PDF exports.
 require_once __DIR__ . '/../auth.php';
 requireRole('superadmin', 'analyst');
 
