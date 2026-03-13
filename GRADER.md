@@ -58,19 +58,18 @@
 
 The Performance report shows a **Poor LCP** metric for `/product.html`. This is not a limitation of the analytics platform itself, but rather reflects the actual performance characteristics of the tracked website. The `/product.html` page is sourced from the course-provided test site (`test.maxk.site`), which was already suboptimal for performance. The analytics platform correctly measures and reports this real-world data.
 
-**Accountability**: The analytics system is working as intended—it faithfully captures actual performance metrics. No correction is needed.
 
 ### 2. PDF Export — Visual Charts Not Included
 
 The **PDF export** currently includes:
-- Summary statistics tables (counts, metrics, percentages)
+- Summary statistics tables 
 - Data tables with detailed breakdowns
 
 However, it **does not render visual charts** (line graphs, doughnut charts, bar charts). Instead, users receive the underlying data in tabular form, which maintains full information integrity but lacks the visual polish of the dashboard.
 
-**Rationale**: PDF generation for interactive charts requires additional dependencies (chart rendering to image format). The current implementation prioritizes data accuracy and delivery time.
+**know limitation**: PDF generation for interactive charts requires additional dependencies (chart rendering to image format). The current implementation prioritizes data accuracy and delivery time. This does still convery all the relevant information, but it could be more visually appealing
 
-**With more time**: I would integrate a chart-to-image library (e.g., Canvas/Playwright-based rendering) to embed charts directly into PDFs, creating a more visually representative export.
+**With more time**: I would integrate a chart-to-image library to embed charts directly into PDFs, creating a more visually representative export. 
 
 ---
 
