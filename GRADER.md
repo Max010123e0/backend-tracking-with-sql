@@ -1,9 +1,4 @@
-# Grader Guide — CSE 135 Analytics Platform
-
-**URL**: https://reporting.maxk.site/
-
----
-
+# Grader Guide
 ## Credentials
 
 | Role | Username | Password | Access |
@@ -17,8 +12,6 @@
 ---
 
 ## Grader Walkthrough Scenario
-
-This scenario demonstrates all major features in a logical order. Estimated time: ~8 minutes.
 
 ### Part 1 — Viewer experience (viewer / viewer2026)
 
@@ -57,4 +50,34 @@ This scenario demonstrates all major features in a logical order. Estimated time
 4. Verify the new user appears in the table with correct role and sections.
 5. Log in with the created user information. You will see that only traffic data is enabled.
 
+---
 
+## Known Limitations & Concerns
+
+### 1. Performance Report — Poor LCP on `/product.html`
+
+The Performance report shows a **Poor LCP** metric for `/product.html`. This is not a limitation of the analytics platform itself, but rather reflects the actual performance characteristics of the tracked website. The `/product.html` page is sourced from the course-provided test site (`test.maxk.site`), which was already suboptimal for performance. The analytics platform correctly measures and reports this real-world data.
+
+**Accountability**: The analytics system is working as intended—it faithfully captures actual performance metrics. No correction is needed.
+
+### 2. PDF Export — Visual Charts Not Included
+
+The **PDF export** currently includes:
+- Summary statistics tables (counts, metrics, percentages)
+- Data tables with detailed breakdowns
+
+However, it **does not render visual charts** (line graphs, doughnut charts, bar charts). Instead, users receive the underlying data in tabular form, which maintains full information integrity but lacks the visual polish of the dashboard.
+
+**Rationale**: PDF generation for interactive charts requires additional dependencies (chart rendering to image format). The current implementation prioritizes data accuracy and delivery time.
+
+**With more time**: I would integrate a chart-to-image library (e.g., Canvas/Playwright-based rendering) to embed charts directly into PDFs, creating a more visually representative export.
+
+---
+
+## Extra Credit Documentation
+
+- **Saved Reports System** — Analysts can save reports with titles and comments, so data and decisions don't disappear after viewing. This keeps a permanent record of findings and explanations like real business-world
+
+- **Saved PDFs with Persistent History** — Exported PDFs are stored with accessible URLs at `/saved.php`, not discarded after download. 
+
+- **Color-coded Core Web Vitals** — Performance metrics use visual status (Good/Needs Work/Poor) instead of raw numbers, enabling users to scan health at a glance.
